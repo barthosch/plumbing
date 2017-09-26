@@ -1,18 +1,33 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import Flow from './components/Flow';
+import PipeField from './components/PipeField';
+
 import './App.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.flow = new Flow();
+  }
+
+  componentDidMount() {
+  }
+
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <PipeField flow={this.flow} posX={0} posY={0} north={false} east={true} south={false} west={true}/>
+        <PipeField flow={this.flow} posX={1} posY={0} north={false} east={true} south={false} west={true}/>
+        <PipeField flow={this.flow} posX={2} posY={0} north={false} east={true} south={true} west={true}/>
+        <PipeField flow={this.flow} posX={3} posY={0} north={false} east={true} south={false} west={true}/>
+        <br />
+        <PipeField flow={this.flow} posX={0} posY={1} north={false} east={true} south={false} west={true}/>
+        <PipeField flow={this.flow} posX={1} posY={1} north={false} east={true} south={false} west={true}/>
+        <PipeField flow={this.flow} posX={2} posY={1} north={true} east={false} south={false} west={true}/>
+        <PipeField flow={this.flow} posX={3} posY={1} north={false} east={true} south={false} west={true}/>
+
+        <br />
+        <button onClick={() => this.flow.sendWater(0, 0, 3, 800)}>Start</button>
       </div>
     );
   }
