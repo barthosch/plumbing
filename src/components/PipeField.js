@@ -64,7 +64,7 @@ class PipeField extends Component {
 
   startWater(waterFrom, inWaterSpeed) {
     waterFrom = waterFrom || Direction.south;
-    console.log(this.props.posX + "," + this.props.posY + " got water from " + waterFrom + " with speed " + inWaterSpeed);
+    // console.log(this.props.posX + "," + this.props.posY + " got water from " + waterFrom + " with speed " + inWaterSpeed);
 
     // todo: account for decreasing water speed
     let outWaterSpeed = inWaterSpeed;//* this.getOutletsCount();
@@ -74,18 +74,22 @@ class PipeField extends Component {
       () => {
         setTimeout(() => {
           if (this.props.north && waterFrom !== Direction.north) {
+            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + this.props.posX + "," + (this.props.posY-1) + " (" + Direction.south + ")");
             this.props.flow.sendWater(this.props.posX, this.props.posY - 1, Direction.south, outWaterSpeed);
           }
 
           if (this.props.east && waterFrom !== Direction.east) {
+            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + (this.props.posX+1) + "," + this.props.posY + " (" + Direction.west + ")");
             this.props.flow.sendWater(this.props.posX + 1, this.props.posY, Direction.west, outWaterSpeed);
           }
 
           if (this.props.south && waterFrom !== Direction.south) {
+            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + this.props.posX + "," + (this.props.posY+1) + " (" + Direction.north + ")");
             this.props.flow.sendWater(this.props.posX, this.props.posY + 1, Direction.north, outWaterSpeed);
           }
 
           if (this.props.west && waterFrom !== Direction.west) {
+            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + (this.props.posX-1) + "," + this.props.posY + " (" + Direction.east + ")");
             this.props.flow.sendWater(this.props.posX - 1, this.props.posY, Direction.east, outWaterSpeed);
           }
         }, outWaterSpeed)
@@ -104,7 +108,7 @@ class PipeField extends Component {
         east: {this.props.east ? 'X' : ''}<br />
         south: {this.props.south ? 'X' : ''}<br />
         west: {this.props.west ? 'X' : ''}<br />
-        {this.state.waterRunning && 'water'}
+        {this.state.waterRunning && 'water'}<br />
       </div>
     );
   }
