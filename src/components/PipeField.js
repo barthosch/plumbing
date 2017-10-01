@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import './PipeField.css'; // Tell Webpack that Button.js uses these styles
+import classNames from 'classnames';
+
+
 
 const Direction = {
   north: 0,
@@ -63,51 +67,56 @@ class PipeField extends Component {
   }
 
   startWater(waterFrom, inWaterSpeed) {
-    waterFrom = waterFrom || Direction.south;
-    // console.log(this.props.posX + "," + this.props.posY + " got water from " + waterFrom + " with speed " + inWaterSpeed);
+    if (!this.state.waterRunning) {
+      waterFrom = waterFrom || Direction.south;
+      // console.log(this.props.posX + "," + this.props.posY + " got water from " + waterFrom + " with speed " + inWaterSpeed);
 
-    // todo: account for decreasing water speed
-    let outWaterSpeed = inWaterSpeed;//* this.getOutletsCount();
+      // todo: account for decreasing water speed
+      let outWaterSpeed = inWaterSpeed;//* this.getOutletsCount();
 
-    this.setState({waterRunning: true},
-      // decide what next
-      () => {
-        setTimeout(() => {
-          if (this.props.north && waterFrom !== Direction.north) {
-            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + this.props.posX + "," + (this.props.posY-1) + " (" + Direction.south + ")");
-            this.props.flow.sendWater(this.props.posX, this.props.posY - 1, Direction.south, outWaterSpeed);
-          }
+      this.setState({waterRunning: true},
+        // decide what next
+        () => {
+          setTimeout(() => {
+            if (this.props.north && waterFrom !== Direction.north) {
+              console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + this.props.posX + "," + (this.props.posY-1) + " (" + Direction.south + ")");
+              this.props.flow.sendWater(this.props.posX, this.props.posY - 1, Direction.south, outWaterSpeed);
+            }
 
-          if (this.props.east && waterFrom !== Direction.east) {
-            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + (this.props.posX+1) + "," + this.props.posY + " (" + Direction.west + ")");
-            this.props.flow.sendWater(this.props.posX + 1, this.props.posY, Direction.west, outWaterSpeed);
-          }
+            if (this.props.east && waterFrom !== Direction.east) {
+              console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + (this.props.posX+1) + "," + this.props.posY + " (" + Direction.west + ")");
+              this.props.flow.sendWater(this.props.posX + 1, this.props.posY, Direction.west, outWaterSpeed);
+            }
 
-          if (this.props.south && waterFrom !== Direction.south) {
-            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + this.props.posX + "," + (this.props.posY+1) + " (" + Direction.north + ")");
-            this.props.flow.sendWater(this.props.posX, this.props.posY + 1, Direction.north, outWaterSpeed);
-          }
+            if (this.props.south && waterFrom !== Direction.south) {
+              console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + this.props.posX + "," + (this.props.posY+1) + " (" + Direction.north + ")");
+              this.props.flow.sendWater(this.props.posX, this.props.posY + 1, Direction.north, outWaterSpeed);
+            }
 
-          if (this.props.west && waterFrom !== Direction.west) {
-            console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + (this.props.posX-1) + "," + this.props.posY + " (" + Direction.east + ")");
-            this.props.flow.sendWater(this.props.posX - 1, this.props.posY, Direction.east, outWaterSpeed);
-          }
-        }, outWaterSpeed)
-      }
-    );
-    // this will make the water slower the less outlets there are
-
-
+            if (this.props.west && waterFrom !== Direction.west) {
+              console.log(this.props.posX +"," + this.props.posY+ " sendWater to " + (this.props.posX-1) + "," + this.props.posY + " (" + Direction.east + ")");
+              this.props.flow.sendWater(this.props.posX - 1, this.props.posY, Direction.east, outWaterSpeed);
+            }
+          }, outWaterSpeed)
+        }
+      );
+      // this will make the water slower the less outlets there are
+    }
   }
 
   render() {
     return (
-      <div style={{border: "1px solid black", width: "120px", height: "120px", display: "inline-block"}}>
+      <div className={classNames("pipe-field",
+        {
+          "water": this.state.waterRunning
+        })}>
+
+        {this.props.north && <div className="pipe north"/>}
+        {this.props.east && <div className="pipe east"/>}
+        {this.props.south && <div className="pipe south"/>}
+        {this.props.west && <div className="pipe west"/>}
+
         {this.props.posX}, {this.props.posY}<br />
-        north: {this.props.north ? 'X' : ''}<br />
-        east: {this.props.east ? 'X' : ''}<br />
-        south: {this.props.south ? 'X' : ''}<br />
-        west: {this.props.west ? 'X' : ''}<br />
         {this.state.waterRunning && 'water'}<br />
       </div>
     );

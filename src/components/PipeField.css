@@ -1,0 +1,29 @@
+.pipe-field {
+  border: 1px solid black;
+  width: 120px;
+  height: 120px;
+  display: inline-block;
+  position: relative; }
+  .pipe-field.water > .pipe {
+    background-color: blue; }
+  .pipe-field > .pipe {
+    position: absolute;
+    background-color: grey; }
+    .pipe-field > .pipe.north, .pipe-field > .pipe.south {
+      height: 75%;
+      width: 50%;
+      left: 25%; }
+    .pipe-field > .pipe.east, .pipe-field > .pipe.west {
+      width: 75%;
+      height: 50%;
+      top: 25%; }
+    .pipe-field > .pipe.north {
+      border-radius: 0 0 25% 25%; }
+    .pipe-field > .pipe.east {
+      left: 25%;
+      border-radius: 25% 0 0 25%; }
+    .pipe-field > .pipe.south {
+      top: 25%;
+      border-radius: 25% 25% 0 0; }
+    .pipe-field > .pipe.west {
+      border-radius: 0 25% 25% 0; }

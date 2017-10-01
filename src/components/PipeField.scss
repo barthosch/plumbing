@@ -1,0 +1,47 @@
+.pipe-field {
+  border: 1px solid black;
+  width: 120px;
+  height: 120px;
+  display: inline-block;
+  position: relative;
+
+
+  &.water > .pipe {
+    background-color: blue;
+  }
+
+  & > .pipe {
+    position: absolute;
+    background-color: grey;
+
+
+    &.north, &.south {
+      height: 75%;
+      width: 50%;
+      left: 25%;
+    }
+
+    &.east, &.west {
+      width: 75%; height: 50%;
+      top: 25%;
+    }
+
+    &.north {
+      border-radius: 0 0 25% 25%;
+    }
+
+    &.east {
+      left: 25%;
+      border-radius: 25% 0 0 25%;
+    }
+
+    &.south {
+      top: 25%;
+      border-radius: 25% 25% 0 0;
+    }
+
+    &.west {
+      border-radius: 0 25% 25% 0;
+    }
+  }
+}
