@@ -1,32 +1,20 @@
 import React, {Component} from 'react';
-import Flow from './components/Flow';
-import PipeField from './components/PipeField';
-
+import Board from './components/Board';
 import './App.css';
 
 class App extends Component {
   constructor() {
     super();
-    this.flow = new Flow();
   }
 
   componentDidMount() {
+
   }
 
   render() {
     return (
       <div className="App">
-
-        <PipeField flow={this.flow} posX={0} posY={0} north={true} east={true} south={true} west={true}/>
-        <PipeField flow={this.flow} posX={1} posY={0} north={false} east={true} south={false} west={true}/>
-        <PipeField flow={this.flow} posX={2} posY={0} north={false} east={false} south={true} west={true}/>
-        <br />
-        <PipeField flow={this.flow} posX={0} posY={1} north={false} east={true} south={false} west={true}/>
-        <PipeField flow={this.flow} posX={1} posY={1} north={true} east={false} south={false} west={true}/>
-        <PipeField flow={this.flow} posX={2} posY={1} north={true} east={false} south={false} west={true}/>
-
-        <br />
-        <button onClick={() => this.flow.sendWater(0, 0, 3, 800)}>Start</button>
+        <Board rows={10} cols={10} style={{width: "600px", height: "600px"}} />
       </div>
     );
   }

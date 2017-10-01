@@ -1,0 +1,12 @@
+.board {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column; }
+  .board > .row {
+    display: flex;
+    flex-direction: row;
+    justify-items: stretch; }
+    .board > .row > .cell {
+      border: 1px solid black;
+      height: 100%;
+      overflow: hidden; }

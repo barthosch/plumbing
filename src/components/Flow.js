@@ -1,3 +1,11 @@
+const Direction = {
+  north: 0,
+  east: 1,
+  south: 2,
+  west: 3
+};
+Object.freeze(Direction);
+
 export default class {
   constructor(boardName = "Testboard", fieldCountX = 10, fieldCountY = 10) {
     this.listeners = [];
@@ -9,32 +17,49 @@ export default class {
   }
 
   sendWater(posX, posY, direction, speed) {
-    // console.log("sendWater " + posX + "," + posY + " to direction " + direction + " at " + speed + " speed");
     if (!this.gameOver) {
       let found = false;
-
       for (let x = 0; x < this.listeners.length; x++) {
         let listener = this.listeners[x];
         // todo: listeners should be a 2 dimensional array to directly access the listener instead of searching it
         if (listener.posX === posX && listener.posY === posY) {
-          listener.callbackFn(direction, speed);
-          this.snd.play();
-          found = true;
+          if (
+            (listener.outlets.north && direction === Direction.north) ||
+            (listener.outlets.east && direction === Direction.east) ||
+            (listener.outlets.south && direction === Direction.south) ||
+            (listener.outlets.west && direction === Direction.west)
+          ) {
+            listener.callbackFn(direction, speed);
+            this.snd.play();
+            found = true;
+          }
           //break;
         }
       }
 
       if (!found) {
+        /* debugger;
         alert("you lose");
         this.gameOver = true;
         this.listeners = [];
+        */
+        console.warn ("LOSE");
       }
     }
   }
 
-  addListener(posX, posY, callbackFn) {
+  addListener(posX, posY, outlets, callbackFn) {
     // console.log("addListener");
-    this.listeners.push({posX, posY, callbackFn});
+    this.removeListener(posX, posY);
+    this.listeners.push({posX, posY, outlets, callbackFn});
+  }
+
+  removeListener(posX, posY) {
+    for (let x = 0; x < this.listeners.length; x++) {
+      if (this.listeners[x].posX === posX && this.listeners[x].posY === posY) {
+        this.listeners.splice(x,1);
+      }
+    }
   }
 
 }

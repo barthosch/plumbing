@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import './PipeField.css'; // Tell Webpack that Button.js uses these styles
+import './PipeField.css';
 import classNames from 'classnames';
-
-
 
 const Direction = {
   north: 0,
@@ -62,14 +60,40 @@ class PipeField extends Component {
       + this.props.south + this.props.west) - 1;
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.flow) {
+      this.props.flow.addListener(nextProps.posX, nextProps.posY,
+        {
+          north: nextProps.north,
+          east: nextProps.east,
+          south: nextProps.south,
+          west: nextProps.west
+        },
+        this.startWater.bind(this))
+    }
+  }
+
   componentDidMount() {
-    this.props.flow.addListener(this.props.posX, this.props.posY, this.startWater.bind(this))
+    if (this.props.flow) {
+      this.props.flow.addListener(this.props.posX, this.props.posY,
+        {
+          north: this.props.north,
+          east: this.props.east,
+          south: this.props.south,
+          west: this.props.west
+        },
+        this.startWater.bind(this))
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.flow) {
+      this.props.flow.removeListener(this.props.posX, this.props.posY);
+    }
   }
 
   startWater(waterFrom, inWaterSpeed) {
     if (!this.state.waterRunning) {
-      waterFrom = waterFrom || Direction.south;
-      // console.log(this.props.posX + "," + this.props.posY + " got water from " + waterFrom + " with speed " + inWaterSpeed);
 
       // todo: account for decreasing water speed
       let outWaterSpeed = inWaterSpeed;//* this.getOutletsCount();
@@ -100,24 +124,17 @@ class PipeField extends Component {
           }, outWaterSpeed)
         }
       );
-      // this will make the water slower the less outlets there are
     }
   }
 
   render() {
     return (
-      <div className={classNames("pipe-field",
-        {
-          "water": this.state.waterRunning
-        })}>
-
+      <div className={classNames("pipe-field", {"water": this.state.waterRunning})}
+           style={this.props.style}>
         {this.props.north && <div className="pipe north"/>}
         {this.props.east && <div className="pipe east"/>}
         {this.props.south && <div className="pipe south"/>}
         {this.props.west && <div className="pipe west"/>}
-
-        {this.props.posX}, {this.props.posY}<br />
-        {this.state.waterRunning && 'water'}<br />
       </div>
     );
   }
