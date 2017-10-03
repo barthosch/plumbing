@@ -8,14 +8,15 @@ export default class Board extends Component {
     super(props);
     this.state = {
       fields: [],
+      entryCol: 0,
+      exitCol: 0,
       currentPipe: {
         north: Math.random() > 0.5,
         east: Math.random() > 0.5,
         south: Math.random() > 0.5,
         west: Math.random() > 0.5
       }
-    }
-
+    };
     this.flow = new Flow();
     this.getRow = this.getRow.bind(this);
     this.placePipe = this.placePipe.bind(this);
@@ -30,7 +31,27 @@ export default class Board extends Component {
       }
       fields.push(row);
     }
-    this.setState({fields});
+
+    let entryCol = parseInt(Math.random() * this.props.cols + 1),
+      exitCol = parseInt(Math.random() * this.props.cols + 1);
+
+    // entry
+    fields[0][entryCol] = {pipe: {
+      north: true,
+      east: false,
+      south: true,
+      west: false
+    }};
+
+    // exit
+    fields[this.props.rows-1][exitCol] = {pipe: {
+      north: true,
+      east: false,
+      south: true,
+      west: false
+    }};
+
+    this.setState({fields, entryCol, exitCol});
   }
 
   placePipe(x, y) {
@@ -64,17 +85,20 @@ export default class Board extends Component {
                                 south={this.state.fields[rowNum][colNum].pipe.south}
                                 west={this.state.fields[rowNum][colNum].pipe.west}/>;
       } else {
-        fieldInner = <div> - </div>
+        fieldInner = <div className="empty-field" onClick={()=>this.placePipe(rowNum, colNum)}> - </div>
       }
 
       return (
         <div className="cell" style={{width: w}}
-             onClick={()=>this.placePipe(rowNum, colNum)}
              key={"board-row-" + rowNum + "-col-"+colNum}>
           {fieldInner}
         </div>
       );
     })
+  }
+
+  setCurrentPipe() {
+
   }
 
   render() {
@@ -86,10 +110,11 @@ export default class Board extends Component {
     return (
       <div>
         <div className="board" style={this.props.style}>{rows}</div>
+
         <PipeField style={{width: "100px", height: "100px"}} north={this.state.currentPipe.north} east={this.state.currentPipe.east}
                    south={this.state.currentPipe.south} west={this.state.currentPipe.west} /><br />
 
-        <button onClick={()=>this.flow.sendWater(0,0,0,1000)}>Starte Wasser</button>
+        <button onClick={()=>this.flow.sendWater(this.state.entryCol, 0, 0, 1000)}>Starte Wasser</button>
       </div>
     );
   }
